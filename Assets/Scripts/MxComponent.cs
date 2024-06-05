@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -14,17 +15,13 @@ public class MxComponent : MonoBehaviour
 
     public GameObject pushCylinder;
     public GameObject ShieldCylinder;
+    public GameObject Conveyor;
 
-    public GameObject pushCylinderStartPoint;
-    public GameObject pushCylinderEndPoint;
     public GameObject pushCylinderSensor1;
     public GameObject pushCylinderSensor2;
     public GameObject pushCylinderSensor3;
     public GameObject pushCylinderSensor4;
-    public GameObject ShieldCylinderStartPoint;
-    public GameObject ShieldCylinderEndPoint;
     public GameObject ShieldCylinderSensor1;
-    public GameObject ShieldCylinderSensor2;
     public GameObject PushSensor;
     public GameObject ShieldSensor1;
     public GameObject ShieldSensor2;
@@ -49,29 +46,35 @@ public class MxComponent : MonoBehaviour
             Read();
             if(preYDataBlock != yDataBlock)
             {
-                pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[0];
-                pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[1];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[2];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[3];
+                pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
+                pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[21];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[23];
+                Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[100];
+                Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
             }
             
-            Sensor(pushCylinderStartPoint, "X0");
-            Sensor(pushCylinderEndPoint, "X1");
-            Sensor(pushCylinderSensor1, "X2");
-            Sensor(pushCylinderSensor2, "X3");
-            Sensor(pushCylinderSensor3, "X4");
-            Sensor(pushCylinderSensor4, "X5");
-            Sensor(ShieldCylinderStartPoint, "X6");
-            Sensor(ShieldCylinderEndPoint, "X7");
-            Sensor(ShieldCylinderSensor1, "X8");
-            Sensor(ShieldCylinderSensor2, "X9");
-            Sensor(PushSensor, "X10");
-            Sensor(ShieldSensor1, "X11");
-            Sensor(ShieldSensor2, "X12");
+            Sensor(pushCylinderSensor1, "X10");
+            Sensor(pushCylinderSensor2, "X11");
+            Sensor(pushCylinderSensor3, "X12");
+            Sensor(pushCylinderSensor4, "X13");
+            Sensor(ShieldCylinderSensor1, "X30");
+            Sensor(PushSensor, "X20");
+            Sensor(ShieldSensor1, "X1");
+            Sensor(ShieldSensor2, "X2");
             
         }
     }
 
+
+    public void OnConveyorBtnClkEvent()
+    {
+        Write($"W,X0,1,");
+    }
+    public void OnTotalProcessBtnClkEvent()
+    {
+        Write($"W,X99,1,");
+    }
     public void Sensor(GameObject Sensor,string component)
     {
         if (Sensor.GetComponent<Sensor>().isChange == 1)

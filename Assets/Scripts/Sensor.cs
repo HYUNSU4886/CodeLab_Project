@@ -23,14 +23,21 @@ public class Sensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        print("good");
         if(other.gameObject.layer == LayerMask.NameToLayer("CylinderPoint"))
         {
             if (isSensing == 0)
             { 
                 isChange = 1;
                 PLCOutput = 1;
-                print("센서 작동");
+                isSensing = 1;
+            }
+        }
+        if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
+        {
+            if (isSensing == 0)
+            {
+                isChange = 1;
+                PLCOutput = 1;
                 isSensing = 1;
             }
         }
@@ -44,7 +51,15 @@ public class Sensor : MonoBehaviour
             {
                 isChange = 1;
                 PLCOutput = 0;
-                print("센서 미작동");
+                isSensing = 0;
+            }
+        }
+        if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
+        {
+            if (isSensing == 1)
+            {
+                isChange = 1;
+                PLCOutput = 0;
                 isSensing = 0;
             }
         }

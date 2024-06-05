@@ -15,12 +15,14 @@ public class Conveyor : MonoBehaviour
 
     public char PLCInput1;
     public char PLCInput2;
+    public char PLCInput3;
 
     // Start is called before the first frame update
     void Start()
     {
         PLCInput1 = '0';
         PLCInput2 = '0';
+        PLCInput3 = '0';
         isBoxIn = false;
         _direction = 1;
         isConveyorMoving = 0;
@@ -30,7 +32,7 @@ public class Conveyor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PLCInput1 == '1')
+        if (PLCInput1 == '1' && PLCInput2 == '0')
         {
             if (isConveyorMoving == 0)
             {
@@ -38,9 +40,9 @@ public class Conveyor : MonoBehaviour
                 StartCoroutine(PLCConveyorOn(direction, speed));
             }
         }
-        if (PLCInput2 == '1')
+        if (PLCInput3 == '1')
             _direction = -1;
-        else if(PLCInput2 == '0')
+        else if(PLCInput3 == '0')
             _direction = 1;
     }
 
