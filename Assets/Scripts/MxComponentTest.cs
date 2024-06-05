@@ -51,6 +51,7 @@ public class MxComponentTest : MonoBehaviour
     {
         client = new TcpClient("127.0.0.1", 7000);
 
+        print("TCP 서버 연결 대기중");
         stream = client.GetStream();
         print("TCP 서버 연결 완료");
     }

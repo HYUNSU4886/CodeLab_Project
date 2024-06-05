@@ -24,30 +24,44 @@ namespace MxComponentServer
         NetworkStream stream;
         Thread thread = new Thread(GetYDataBlock);
         static string ydata;
+        static int isGetYDataBlock = 0;
 
         public MxComopentServer()
         {
             mxComponent = new ActUtlType64();
             mxComponent.ActLogicalStationNumber = 1;
             StartTCPServer();
-
+            new Thread(RepeatYThread).Start();
             while (true)
             {
                 int bytes;
-                byte[] buffer = new byte[100];
-                Console.WriteLine(stream.CanRead);
-                Console.WriteLine(stream.CanWrite);
-                if (stream.CanRead)
+                byte[] buffer = new byte[200];
+                stream.Read(buffer, 0, 10);
+                string output = Encoding.ASCII.GetString(buffer, 0, 10).Trim('\0');
+                string[] splitOutput = output.Split(',');
+                switch (splitOutput[0])
                 {
-                    stream.Read(buffer, 0, buffer.Length);
-                    string output = Encoding.ASCII.
-                    GetString(buffer, 0, 100).Trim('\0');
-                    Console.WriteLine(output);
-                    Console.WriteLine(stream.CanRead);
-                    Console.WriteLine(stream.CanWrite);
-                    buffer = Encoding.ASCII.GetBytes(output);
-                    stream.Write(buffer, 0, buffer.Length);
-
+                    case "R":
+                        {
+                            buffer = Encoding.ASCII.GetBytes(ydata);
+                            stream.Write(buffer, 0, buffer.Length);
+                            break;
+                        }
+                    case "W":
+                        {
+                            SetData(splitOutput[1], int.Parse(splitOutput[2]));
+                            break;
+                        }
+                    case "CP":
+                        {
+                            Console.WriteLine(ConnectPLC());
+                            break;
+                        }
+                    case "DP":
+                        {
+                            Console.WriteLine(DisconnectPLC());
+                            break;
+                        }
                 }
             }
         }
@@ -78,17 +92,28 @@ namespace MxComponentServer
             }
         }
 
+        static void RepeatYThread()
+        {
+            while (true)
+            {
+                if (isGetYDataBlock == 0)
+                {
+                    isGetYDataBlock = 1;
+                    GetYDataBlock();
+                }
+            }
+        }
         static void GetYDataBlock()
         {
             short[] yData = new short[11];
-            mxComponent.ReadDeviceBlock2("Y0", 11, out yData[0]);
-
+            mxComponent.ReadDeviceBlock2("Y0", 30, out yData[0]);
             ydata = ConvertDataIntoString(yData);
+            isGetYDataBlock = 0;
         }
 
         public void SetData(string device, int value)
         {
-            int ret = mxComponent.SetDevice(device, 1);
+            int ret = mxComponent.SetDevice(device, value);
         }
         static string ConvertDataIntoString(short[] data)
         {

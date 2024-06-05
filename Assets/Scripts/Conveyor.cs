@@ -10,17 +10,38 @@ public class Conveyor : MonoBehaviour
     public int isActive;
     public int _direction;
     public bool isBoxIn;
+    int isConveyorMoving;
+    int isConveyorReversing;
+
+    public char PLCInput1;
+    public char PLCInput2;
 
     // Start is called before the first frame update
     void Start()
     {
+        PLCInput1 = '0';
+        PLCInput2 = '0';
         isBoxIn = false;
         _direction = 1;
+        isConveyorMoving = 0;
+        isConveyorReversing = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (PLCInput1 == '1')
+        {
+            if (isConveyorMoving == 0)
+            {
+                isConveyorMoving = 1;
+                StartCoroutine(PLCConveyorOn(direction, speed));
+            }
+        }
+        if (PLCInput2 == '1')
+            _direction = -1;
+        else if(PLCInput2 == '0')
+            _direction = 1;
     }
 
 
@@ -34,6 +55,12 @@ public class Conveyor : MonoBehaviour
         isActive = 0;
     }
 
+    IEnumerator PLCConveyorOn(Vector3 direction, float speed)
+    {
+        Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
+        yield return new WaitForSeconds(0.01f);
+        isConveyorMoving = 0;
+    }
     public void ReverseConveyorDirectionBtnClkEvent()
     {
         _direction = _direction * -1;
