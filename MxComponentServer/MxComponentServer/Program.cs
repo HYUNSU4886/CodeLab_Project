@@ -35,7 +35,7 @@ namespace MxComponentServer
             while (true)
             {
                 int bytes;
-                byte[] buffer = new byte[200];
+                byte[] buffer = new byte[320];
                 stream.Read(buffer, 0, 10);
                 string output = Encoding.ASCII.GetString(buffer, 0, 10).Trim('\0');
                 string[] splitOutput = output.Split(',');
@@ -105,8 +105,8 @@ namespace MxComponentServer
         }
         static void GetYDataBlock()
         {
-            short[] yData = new short[11];
-            mxComponent.ReadDeviceBlock2("Y0", 30, out yData[0]);
+            short[] yData = new short[32];
+            mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
             ydata = ConvertDataIntoString(yData);
             isGetYDataBlock = 0;
         }
