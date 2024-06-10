@@ -52,6 +52,7 @@ public class MxComponent : MonoBehaviour
                 ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[23];
                 Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
                 Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
+                print(yDataBlock);
             }
             
             Sensor(pushCylinderSensor1, "X10");
@@ -62,7 +63,6 @@ public class MxComponent : MonoBehaviour
             Sensor(PushSensor, "X20");
             Sensor(ShieldSensor1, "X1");
             Sensor(ShieldSensor2, "X2");
-            
         }
     }
 
@@ -85,8 +85,8 @@ public class MxComponent : MonoBehaviour
     }
     public void Read()
     {
-        byte[] buffer = new byte[200];
-        stream.Read(buffer, 0, 200);
+        byte[] buffer = new byte[320];
+        stream.Read(buffer, 0, 320);
         yDataBlock = Encoding.ASCII.GetString(buffer);
     }
 
