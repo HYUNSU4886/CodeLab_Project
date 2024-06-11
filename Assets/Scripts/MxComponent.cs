@@ -48,8 +48,8 @@ public class MxComponent : MonoBehaviour
             {
                 pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
                 pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[21];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[23];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[23];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[21];
                 Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
                 Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
                 print(yDataBlock);

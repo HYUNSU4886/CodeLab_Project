@@ -59,9 +59,12 @@ public class Conveyor : MonoBehaviour
 
     IEnumerator PLCConveyorOn(Vector3 direction, float speed)
     {
-        Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
-        yield return new WaitForSeconds(0.01f);
-        isConveyorMoving = 0;
+        if(isBoxIn)
+        {
+            Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
+            yield return new WaitForSeconds(0.01f);
+            isConveyorMoving = 0;
+        }
     }
     public void ReverseConveyorDirectionBtnClkEvent()
     {

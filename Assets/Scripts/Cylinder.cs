@@ -31,7 +31,6 @@ public class Cylinder : MonoBehaviour
         sensing = 0;
         endIndex = 0;
         isPistonMoving = 0;
-        location = 0;
     }
 
     // Update is called once per frame
