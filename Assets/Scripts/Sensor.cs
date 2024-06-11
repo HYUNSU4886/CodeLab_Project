@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Sensor : MonoBehaviour
 {
     public int isSensing;
     public int PLCOutput;
     public int isChange;
+    public GameObject Button;
 
     void Start()
     {
@@ -30,6 +32,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 1;
                 isSensing = 1;
+                Button.GetComponent<Image>().color = Color.red;
             }
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
@@ -39,6 +42,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 1;
                 isSensing = 1;
+                Button.GetComponent<Image>().color = Color.red;
             }
         }
     }
@@ -52,6 +56,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 0;
                 isSensing = 0;
+                Button.GetComponent<Image>().color = Color.white;
             }
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
@@ -61,6 +66,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 0;
                 isSensing = 0;
+                Button.GetComponent<Image>().color = Color.white;
             }
         }
     }

@@ -33,6 +33,7 @@ namespace MxComponentServer
             mxComponent.ActLogicalStationNumber = 1;
             StartTCPServer();
             new Thread(RepeatYThread).Start();
+
             while (true)
             {
                 int bytes;
@@ -51,7 +52,7 @@ namespace MxComponentServer
                     case "W":
                         {
                             Console.WriteLine(output);
-                            SetData(splitOutput[1], int.Parse(splitOutput[2]));
+                            new Thread(() => SetData(splitOutput[1], int.Parse(splitOutput[2]))).Start();
                             break;
                         }
                     case "CP":

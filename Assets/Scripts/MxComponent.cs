@@ -29,10 +29,23 @@ public class MxComponent : MonoBehaviour
     public string preYDataBlock;
     public string yDataBlock;
 
+    public int isManual;
+    public int isAuto;
+    public string isMRConveyorMoving;
+    public string isMLConveyorMoving;
+    public string isMRPCylinderMoving;
+    public string isMLPCylinderMoving;
+    public string isMRSCylinderMoving;
+    public string isMLSCylinderMoving;
+
     void Start()
     {
         isTCPConnecting = false;
         isPLCConnecting = false;
+        isMRConveyorMoving = "0";
+        isMLConveyorMoving = "0";
+        isMRSCylinderMoving = "0";
+        isMLSCylinderMoving = "0";
         
     }
 
@@ -46,12 +59,30 @@ public class MxComponent : MonoBehaviour
             Read();
             if(preYDataBlock != yDataBlock)
             {
-                pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
-                pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[23];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[21];
-                Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
-                Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
+                // Auto
+                if(isAuto == 1)
+                {
+                    pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
+                    pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
+                    ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[23];
+                    ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[21];
+                    Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
+                    Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
+
+                }
+
+                // Manual
+                if(isManual == 1)
+                {
+                    pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[92];
+                    pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[93];
+                    ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[94];
+                    ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[95];
+                    Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[90];
+                    Conveyor.GetComponent<Conveyor>().PLCInput3 = yDataBlock[91];
+                }
+
+
                 print(yDataBlock);
             }
             
@@ -67,14 +98,6 @@ public class MxComponent : MonoBehaviour
     }
 
 
-    public void OnConveyorBtnClkEvent()
-    {
-        Write($"W,X0,1,");
-    }
-    public void OnTotalProcessBtnClkEvent()
-    {
-        Write($"W,X99,1,");
-    }
     public void Sensor(GameObject Sensor,string component)
     {
         if (Sensor.GetComponent<Sensor>().isChange == 1)
@@ -115,5 +138,69 @@ public class MxComponent : MonoBehaviour
     public void DisconnectPLC()
     {
         Write("DP,");
+    }
+    public void OnConveyorBtnClkEvent()
+    {
+        Write($"W,X0,1,");
+    }
+    public void OnAutoProcessBtnClkEvent()
+    {
+        Write($"W,X99,1,");
+        isAuto = 1;
+        isManual = 0;
+    }
+    public void OnManualProcessBtnClkEvent()
+    {
+        Write($"W,X4,1,");
+        isAuto = 0;
+        isManual = 1;
+    }
+    public void MRConveyorBtnClkEvent()
+    {
+        if (isMRConveyorMoving == "1")
+            isMRConveyorMoving = "0";
+        else
+            isMRConveyorMoving = "1";
+        Write($"W,X90,{isMRConveyorMoving},");
+    }
+    public void MLConveyorBtnClkEvent()
+    {
+        if (isMLConveyorMoving == "1")
+            isMLConveyorMoving = "0";
+        else
+            isMLConveyorMoving = "1";
+        Write($"W,X91,{isMLConveyorMoving},");
+    }
+    public void MRPCylinderBtnClkEvent()
+    {
+        if (isMRPCylinderMoving == "1")
+            isMRPCylinderMoving = "0";
+        else
+            isMRPCylinderMoving = "1";
+        Write($"W,X92,{isMRPCylinderMoving},");
+    }
+    public void MLPCylinderBtnClkEvent()
+    {
+        if (isMLPCylinderMoving == "1")
+            isMLPCylinderMoving = "0";
+        else
+            isMLPCylinderMoving = "1";
+        Write($"W,X93,{isMLPCylinderMoving},");
+    }
+    public void MRSCylinderBtnClkEvent()
+    {
+        if (isMRSCylinderMoving == "1")
+            isMRSCylinderMoving = "0";
+        else
+            isMRSCylinderMoving = "1";
+        Write($"W,X94,{isMRSCylinderMoving},");
+    }
+    public void MLSCylinderBtnClkEvent()
+    {
+        if (isMLSCylinderMoving == "1")
+            isMLSCylinderMoving = "0";
+        else
+            isMLSCylinderMoving = "1";
+        Write($"W,X95,{isMLSCylinderMoving},");
     }
 }
