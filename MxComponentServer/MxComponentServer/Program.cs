@@ -109,7 +109,7 @@ namespace MxComponentServer
         static void GetYDataBlock()
         {
             mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
-            Thread.Sleep(100);
+            Thread.Sleep(10);
             ydata = ConvertDataIntoString(yData);
             isGetYDataBlock = 0;
         }
