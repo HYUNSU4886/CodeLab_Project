@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Conveyor : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class Conveyor : MonoBehaviour
     public char PLCInput2;
     public char PLCInput3;
 
+    public GameObject LED1;
+    public GameObject LED2;
+    public int ledCheck1;
+    public int ledCheck2;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,18 +39,44 @@ public class Conveyor : MonoBehaviour
     {
         if (PLCInput1 == '1' && PLCInput2 == '0')
         {
+            if(ledCheck1 == 0)
+            {
+                ledCheck1 = 1;
+                LED1.GetComponent<Image>().color = Color.red;
+            }
             if (isConveyorMoving == 0)
             {
                 isConveyorMoving = 1;
                 StartCoroutine(PLCConveyorOn(direction, speed));
             }
         }
+        if(PLCInput1 == '0' && PLCInput2 == '1')
+        {
+            if (ledCheck1 == 1)
+            {
+                ledCheck1 = 0;
+                LED1.GetComponent<Image>().color = Color.white;
+            }
+        }
         if (PLCInput3 == '1')
         {
+            if (ledCheck2 == 0)
+            {
+                ledCheck2 = 1;
+                LED2.GetComponent<Image>().color = Color.red;
+            }
             if (isConveyorMoving == 0)
             {
                 isConveyorMoving = 1;
                 StartCoroutine(PLCConveyorRevOn(direction, speed));
+            }
+        }
+        if (PLCInput3 == '0')
+        {
+            if (ledCheck2 == 1)
+            {
+                ledCheck2 = 0;
+                LED2.GetComponent<Image>().color = Color.white;
             }
         }
     }

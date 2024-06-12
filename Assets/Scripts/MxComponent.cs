@@ -16,6 +16,9 @@ public class MxComponent : MonoBehaviour
     public GameObject pushCylinder;
     public GameObject ShieldCylinder;
     public GameObject Conveyor;
+    public GameObject XServoMotor;
+    public GameObject YServoMotor;
+    public GameObject ZServoMotor;
 
     public GameObject pushCylinderSensor1;
     public GameObject pushCylinderSensor2;
@@ -68,7 +71,12 @@ public class MxComponent : MonoBehaviour
                     ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[21];
                     Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
                     Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
-
+                    XServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[170];
+                    XServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[171];
+                    YServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[172];
+                    YServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[173];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[174];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[175];
                 }
 
                 // Manual
@@ -160,47 +168,51 @@ public class MxComponent : MonoBehaviour
         if (isMRConveyorMoving == "1")
             isMRConveyorMoving = "0";
         else
+        {
             isMRConveyorMoving = "1";
+            isMLConveyorMoving = "0";
+        }
         Write($"W,X90,{isMRConveyorMoving},");
+        Write($"W,X91,{isMLConveyorMoving},");
     }
     public void MLConveyorBtnClkEvent()
     {
         if (isMLConveyorMoving == "1")
             isMLConveyorMoving = "0";
         else
+        {
             isMLConveyorMoving = "1";
+            isMRConveyorMoving = "0";
+        }
         Write($"W,X91,{isMLConveyorMoving},");
+        Write($"W,X90,{isMRConveyorMoving},");
     }
     public void MRPCylinderBtnClkEvent()
     {
-        if (isMRPCylinderMoving == "1")
-            isMRPCylinderMoving = "0";
-        else
-            isMRPCylinderMoving = "1";
+        isMRPCylinderMoving = "1";
+        isMLPCylinderMoving = "0";
         Write($"W,X92,{isMRPCylinderMoving},");
+        Write($"W,X93,{isMLPCylinderMoving},");
     }
     public void MLPCylinderBtnClkEvent()
     {
-        if (isMLPCylinderMoving == "1")
-            isMLPCylinderMoving = "0";
-        else
-            isMLPCylinderMoving = "1";
+        isMLPCylinderMoving = "1";
+        isMRPCylinderMoving = "0";
         Write($"W,X93,{isMLPCylinderMoving},");
+        Write($"W,X92,{isMRPCylinderMoving},");
     }
     public void MRSCylinderBtnClkEvent()
     {
-        if (isMRSCylinderMoving == "1")
-            isMRSCylinderMoving = "0";
-        else
-            isMRSCylinderMoving = "1";
+        isMRSCylinderMoving = "1";
+        isMLSCylinderMoving = "0";
         Write($"W,X94,{isMRSCylinderMoving},");
+        Write($"W,X95,{isMLSCylinderMoving},");
     }
     public void MLSCylinderBtnClkEvent()
     {
-        if (isMLSCylinderMoving == "1")
-            isMLSCylinderMoving = "0";
-        else
-            isMLSCylinderMoving = "1";
+        isMLSCylinderMoving = "1";
+        isMRSCylinderMoving = "0";
         Write($"W,X95,{isMLSCylinderMoving},");
+        Write($"W,X94,{isMRSCylinderMoving},");
     }
 }
