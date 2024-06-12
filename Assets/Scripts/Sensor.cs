@@ -32,7 +32,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 1;
                 isSensing = 1;
-                Button.GetComponent<Image>().color = Color.red;
+                Button.GetComponent<Image>().color = Color.green;
             }
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
@@ -42,7 +42,7 @@ public class Sensor : MonoBehaviour
                 isChange = 1;
                 PLCOutput = 1;
                 isSensing = 1;
-                Button.GetComponent<Image>().color = Color.red;
+                Button.GetComponent<Image>().color = Color.green;
             }
         }
     }

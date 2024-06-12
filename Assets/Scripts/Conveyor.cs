@@ -37,12 +37,12 @@ public class Conveyor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PLCInput1 == '1' && PLCInput2 == '0')
+        if (PLCInput1 == '1')
         {
             if(ledCheck1 == 0)
             {
                 ledCheck1 = 1;
-                LED1.GetComponent<Image>().color = Color.red;
+                LED1.GetComponent<Image>().color = Color.green;
             }
             if (isConveyorMoving == 0)
             {
@@ -50,7 +50,7 @@ public class Conveyor : MonoBehaviour
                 StartCoroutine(PLCConveyorOn(direction, speed));
             }
         }
-        if(PLCInput1 == '0' && PLCInput2 == '1')
+        if(PLCInput1 == '0')
         {
             if (ledCheck1 == 1)
             {
@@ -63,7 +63,7 @@ public class Conveyor : MonoBehaviour
             if (ledCheck2 == 0)
             {
                 ledCheck2 = 1;
-                LED2.GetComponent<Image>().color = Color.red;
+                LED2.GetComponent<Image>().color = Color.green;
             }
             if (isConveyorMoving == 0)
             {

@@ -46,7 +46,7 @@ public class Cylinder : MonoBehaviour
             if(ledCheck1 == 0)
             {
                 ledCheck1 = 1;
-                LED1.GetComponent<Image>().color = Color.red;
+                LED1.GetComponent<Image>().color = Color.green;
             }
             if(isPistonMoving == 0)
             {
@@ -67,7 +67,7 @@ public class Cylinder : MonoBehaviour
             if (ledCheck2 == 0)
             {
                 ledCheck2 = 1;
-                LED2.GetComponent<Image>().color = Color.red;
+                LED2.GetComponent<Image>().color = Color.green;
             }
             if (isPistonMoving == 0)
             {

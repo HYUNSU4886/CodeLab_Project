@@ -46,6 +46,7 @@ public class Transfer : MonoBehaviour
             if (ledCheck1 == 0)
             {
                 ledCheck1 = 1;
+                LED1.GetComponent<Image>().color = Color.green;
             }
             if (isTransfering == 0)
             {
@@ -58,6 +59,7 @@ public class Transfer : MonoBehaviour
             if (ledCheck1 == 1)
             {
                 ledCheck1 = 0;
+                LED1.GetComponent<Image>().color = Color.white;
             }
         }
         if (PLCInput2 == '1')
@@ -65,6 +67,7 @@ public class Transfer : MonoBehaviour
             if (ledCheck2 == 0)
             {
                 ledCheck2 = 1;
+                LED2.GetComponent<Image>().color = Color.green;
             }
             if (isTransfering == 0)
             {
@@ -77,6 +80,7 @@ public class Transfer : MonoBehaviour
             if (ledCheck2 == 1)
             {
                 ledCheck2 = 0;
+                LED2.GetComponent<Image>().color = Color.white;
             }
         }
     }
@@ -151,5 +155,20 @@ public class Transfer : MonoBehaviour
         reverse.interactable = true;
         active.interactable = true;
         endIndex = 1;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Box"))
+        {
+            other.transform.SetParent(TransferComponent);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
+        {
+            other.transform.SetParent(null);
+        }
     }
 }

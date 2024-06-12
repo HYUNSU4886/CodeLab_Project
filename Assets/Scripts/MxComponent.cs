@@ -19,6 +19,8 @@ public class MxComponent : MonoBehaviour
     public GameObject XServoMotor;
     public GameObject YServoMotor;
     public GameObject ZServoMotor;
+    public GameObject Rotate;
+    public GameObject ForkCylinder;
 
     public GameObject pushCylinderSensor1;
     public GameObject pushCylinderSensor2;
@@ -40,6 +42,16 @@ public class MxComponent : MonoBehaviour
     public string isMLPCylinderMoving;
     public string isMRSCylinderMoving;
     public string isMLSCylinderMoving;
+    public string isMRXTransfering;
+    public string isMLXTransfering;
+    public string isMRYTransfering;
+    public string isMLYTransfering;
+    public string isMRZTransfering;
+    public string isMLZTransfering;
+    public string isMRFCylinderMoving;
+    public string isMLFCylinderMoving;
+    public string isMRRotating;
+    public string isMLRotating;
 
     void Start()
     {
@@ -88,6 +100,17 @@ public class MxComponent : MonoBehaviour
                     ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[95];
                     Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[90];
                     Conveyor.GetComponent<Conveyor>().PLCInput3 = yDataBlock[91];
+                    XServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[40];
+                    XServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[41];
+                    YServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[42];
+                    YServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[43];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[44];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[45];
+                    ForkCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[46];
+                    ForkCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[47];
+                    Rotate.GetComponent<Rotate>().PLCInput1 = yDataBlock[48];
+                    Rotate.GetComponent<Rotate>().PLCInput2 = yDataBlock[49];
+
                 }
 
 
@@ -214,5 +237,105 @@ public class MxComponent : MonoBehaviour
         isMRSCylinderMoving = "0";
         Write($"W,X95,{isMLSCylinderMoving},");
         Write($"W,X94,{isMRSCylinderMoving},");
+    }
+    public void MRXTransferBtnClkEvent()
+    {
+        if(isMRXTransfering == "1")
+            isMRXTransfering = "0";
+        else
+        {
+            isMRXTransfering = "1";
+            isMLXTransfering = "0";
+        }
+        Write($"W,X40,{isMRXTransfering},");
+        Write($"W,X41,{isMLXTransfering},");
+    }
+    public void MLXTransferBtnClkEvent()
+    {
+        if (isMLXTransfering == "1")
+            isMLXTransfering = "0";
+        else
+        {
+            isMLXTransfering = "1";
+            isMRXTransfering = "0";
+        }
+        Write($"W,X41,{isMLXTransfering},");
+        Write($"W,X40,{isMRXTransfering},");
+    }
+    public void MRYTransferBtnClkEvent()
+    {
+        if (isMRYTransfering == "1")
+            isMRYTransfering = "0";
+        else
+        {
+            isMRYTransfering = "1";
+            isMLYTransfering = "0";
+        }
+        Write($"W,X42,{isMRYTransfering},");
+        Write($"W,X43,{isMLYTransfering},");
+    }
+    public void MLYTransferBtnClkEvent()
+    {
+        if (isMLYTransfering == "1")
+            isMLYTransfering = "0";
+        else
+        {
+            isMLYTransfering = "1";
+            isMRYTransfering = "0";
+        }
+        Write($"W,X43,{isMLYTransfering},");
+        Write($"W,X42,{isMRYTransfering},");
+    }
+    public void MRZTransferBtnClkEvent()
+    {
+        if (isMRZTransfering == "1")
+            isMRZTransfering = "0";
+        else
+        {
+            isMRZTransfering = "1";
+            isMLZTransfering = "0";
+        }
+        Write($"W,X44,{isMRZTransfering},");
+        Write($"W,X45,{isMLZTransfering},");
+    }
+    public void MLZTransferBtnClkEvent()
+    {
+        if (isMLZTransfering == "1")
+            isMLZTransfering = "0";
+        else
+        {
+            isMLZTransfering = "1";
+            isMRZTransfering = "0";
+        }
+        Write($"W,X45,{isMLZTransfering},");
+        Write($"W,X44,{isMRZTransfering},");
+    }
+    public void MRFCylinderBtnClkEvent()
+    {
+        isMRFCylinderMoving = "1";
+        isMLFCylinderMoving = "0";
+        Write($"W,X46,{isMRFCylinderMoving},");
+        Write($"W,X47,{isMLFCylinderMoving},");
+    }
+    public void MLFCylinderBtnClkEvent()
+    {
+        isMLFCylinderMoving = "1";
+        isMRFCylinderMoving = "0";
+        Write($"W,X47,{isMLFCylinderMoving},");
+        Write($"W,X46,{isMRFCylinderMoving},");
+    }
+    public void MRRotateBtnClkEvent()
+    {
+        isMRRotating = "1";
+        isMLRotating = "0";
+        Write($"W,X48,{isMRRotating},");
+        Write($"W,X49,{isMLRotating},");
+    }
+    public void MLRotateBtnClkEvent()
+    {
+        isMLRotating = "1";
+        isMRRotating = "0";
+        Write($"W,X49,{isMLRotating},");
+        Write($"W,X48,{isMRRotating},");
     }
 }
