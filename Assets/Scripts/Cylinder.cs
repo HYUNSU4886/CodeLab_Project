@@ -22,7 +22,12 @@ public class Cylinder : MonoBehaviour
     public int endIndex;
     float time = 0;
     public int sensing;
-    public float location = 0;
+    public float location;
+    public int ledCheck1;
+    public int ledCheck2;
+
+    public GameObject LED1;
+    public GameObject LED2;
 
     void Start()
     {
@@ -38,18 +43,44 @@ public class Cylinder : MonoBehaviour
     {
         if (PLCInput1 == '1')
         {
+            if(ledCheck1 == 0)
+            {
+                ledCheck1 = 1;
+                LED1.GetComponent<Image>().color = Color.red;
+            }
             if(isPistonMoving == 0)
             {
                 isPistonMoving = 1;
                 StartCoroutine(FrontPLCPistons());
             }
         }
+        if(PLCInput1 == '0')
+        {
+            if(ledCheck1 == 1)
+            {
+                ledCheck1 = 0;
+                LED1.GetComponent<Image>().color = Color.white;
+            }
+        }
         if (PLCInput2 == '1')
         {
+            if (ledCheck2 == 0)
+            {
+                ledCheck2 = 1;
+                LED2.GetComponent<Image>().color = Color.red;
+            }
             if (isPistonMoving == 0)
             {
                 isPistonMoving = 1;
                 StartCoroutine(BackPLCPistons());
+            }
+        }
+        if (PLCInput2 == '0')
+        {
+            if (ledCheck2 == 1)
+            {
+                ledCheck2 = 0;
+                LED2.GetComponent<Image>().color = Color.white;
             }
         }
     }
