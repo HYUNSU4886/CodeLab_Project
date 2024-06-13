@@ -107,22 +107,21 @@ public class Transfer : MonoBehaviour
 
     IEnumerator FrontPLCTransfer()
     {
-        if (location <= distance)
+        if (location < distance)
         {
-            location = location + _direction * speed;
-            TransferComponent.position = TransferComponent.position + direction * speed;
-            yield return new WaitForSeconds(0.01f);
+            location = location + _direction * speed * Time.deltaTime;
+            TransferComponent.position = TransferComponent.position + direction * speed * Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
         isTransfering = 0;
     }
     IEnumerator BackPLCTransfer()
     {
-        if (location >= 0)
+        if (location > 0)
         {
-
-            location = location - _direction * speed;
-            TransferComponent.position = TransferComponent.position - direction * speed;
-            yield return new WaitForSeconds(0.01f);
+            location = location - _direction * speed * Time.deltaTime;
+            TransferComponent.position = TransferComponent.position - direction * speed * Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
         isTransfering = 0;
     }
@@ -157,18 +156,4 @@ public class Transfer : MonoBehaviour
         endIndex = 1;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Box"))
-        {
-            other.transform.SetParent(TransferComponent);
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Box"))
-        {
-            other.transform.SetParent(null);
-        }
-    }
 }

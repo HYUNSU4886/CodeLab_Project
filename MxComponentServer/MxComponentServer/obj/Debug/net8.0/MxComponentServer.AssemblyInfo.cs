@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d76fbe7aa08462f9b2131115a2c9e2e749b424a4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70113b1a47ac2e9fa02ff9384f6cd80ef80171bc")]
 [assembly: System.Reflection.AssemblyProductAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -89,6 +89,8 @@ public class MxComponent : MonoBehaviour
                     YServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[173];
                     ZServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[174];
                     ZServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[175];
+                    ForkCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[176];
+                    ForkCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[177];
                 }
 
                 // Manual
@@ -159,6 +161,13 @@ public class MxComponent : MonoBehaviour
         stream = client.GetStream();
         print("TCP 서버 연결 완료");
         isTCPConnecting = true;
+    }
+
+    public void DisConnectTCPServer()
+    {
+        Write("CS,");
+        print("TCP 서버 연결 해제 완료");
+        isTCPConnecting = false;
     }
     public void ConnectPLC()
     {
