@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Conveyor : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class Conveyor : MonoBehaviour
     public char PLCInput2;
     public char PLCInput3;
 
+    public GameObject LED1;
+    public GameObject LED2;
+    public int ledCheck1;
+    public int ledCheck2;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,18 +37,48 @@ public class Conveyor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PLCInput1 == '1' && PLCInput2 == '0')
+        if (PLCInput1 == '1')
         {
+            if(ledCheck1 == 0)
+            {
+                ledCheck1 = 1;
+                LED1.GetComponent<Image>().color = Color.green;
+            }
             if (isConveyorMoving == 0)
             {
                 isConveyorMoving = 1;
                 StartCoroutine(PLCConveyorOn(direction, speed));
             }
         }
+        if(PLCInput1 == '0')
+        {
+            if (ledCheck1 == 1)
+            {
+                ledCheck1 = 0;
+                LED1.GetComponent<Image>().color = Color.white;
+            }
+        }
         if (PLCInput3 == '1')
-            _direction = -1;
-        else if(PLCInput3 == '0')
-            _direction = 1;
+        {
+            if (ledCheck2 == 0)
+            {
+                ledCheck2 = 1;
+                LED2.GetComponent<Image>().color = Color.green;
+            }
+            if (isConveyorMoving == 0)
+            {
+                isConveyorMoving = 1;
+                StartCoroutine(PLCConveyorRevOn(direction, speed));
+            }
+        }
+        if (PLCInput3 == '0')
+        {
+            if (ledCheck2 == 1)
+            {
+                ledCheck2 = 0;
+                LED2.GetComponent<Image>().color = Color.white;
+            }
+        }
     }
 
 
@@ -59,9 +94,21 @@ public class Conveyor : MonoBehaviour
 
     IEnumerator PLCConveyorOn(Vector3 direction, float speed)
     {
-        Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
-        yield return new WaitForSeconds(0.01f);
-        isConveyorMoving = 0;
+        if(isBoxIn)
+        {
+            Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
+            yield return new WaitForSeconds(0.01f);
+            isConveyorMoving = 0;
+        }
+    }
+    IEnumerator PLCConveyorRevOn(Vector3 direction, float speed)
+    {
+        if (isBoxIn)
+        {
+            Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction * -1;
+            yield return new WaitForSeconds(0.01f);
+            isConveyorMoving = 0;
+        }
     }
     public void ReverseConveyorDirectionBtnClkEvent()
     {

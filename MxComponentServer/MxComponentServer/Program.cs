@@ -25,6 +25,7 @@ namespace MxComponentServer
         Thread thread = new Thread(GetYDataBlock);
         static string ydata;
         static int isGetYDataBlock = 0;
+        static short[] yData = new short[32];
 
         public MxComopentServer()
         {
@@ -32,10 +33,11 @@ namespace MxComponentServer
             mxComponent.ActLogicalStationNumber = 1;
             StartTCPServer();
             new Thread(RepeatYThread).Start();
+
             while (true)
             {
                 int bytes;
-                byte[] buffer = new byte[200];
+                byte[] buffer = new byte[320];
                 stream.Read(buffer, 0, 10);
                 string output = Encoding.ASCII.GetString(buffer, 0, 10).Trim('\0');
                 string[] splitOutput = output.Split(',');
@@ -49,7 +51,8 @@ namespace MxComponentServer
                         }
                     case "W":
                         {
-                            SetData(splitOutput[1], int.Parse(splitOutput[2]));
+                            Console.WriteLine(output);
+                            new Thread(() => SetData(splitOutput[1], int.Parse(splitOutput[2]))).Start();
                             break;
                         }
                     case "CP":
@@ -105,8 +108,8 @@ namespace MxComponentServer
         }
         static void GetYDataBlock()
         {
-            short[] yData = new short[11];
-            mxComponent.ReadDeviceBlock2("Y0", 30, out yData[0]);
+            mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
+            Thread.Sleep(10);
             ydata = ConvertDataIntoString(yData);
             isGetYDataBlock = 0;
         }
