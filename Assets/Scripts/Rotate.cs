@@ -107,7 +107,7 @@ public class Rotate : MonoBehaviour
 
     IEnumerator FrontPLCRotate()
     {
-        if (angle <= distance)
+        if (angle < distance)
         {
             angle = angle + _direction * speed;
             RotateComponent.rotation = RotateComponent.rotation * Quaternion.Euler(direction * speed);
@@ -117,7 +117,7 @@ public class Rotate : MonoBehaviour
     }
     IEnumerator BackPLCRotate()
     {
-        if (angle >= 0)
+        if (angle > 0)
         {
 
             angle = angle - _direction * speed;

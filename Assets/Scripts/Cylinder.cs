@@ -107,21 +107,21 @@ public class Cylinder : MonoBehaviour
 
     IEnumerator FrontPLCPistons()
     {
-        if(location <= distance) 
+        if(location < distance) 
         { 
             location = location + _direction * speed;
-            piston.position = piston.position + direction * speed;
+            piston.localPosition = piston.localPosition + direction * speed;
             yield return new WaitForSeconds(0.01f);
         }
         isPistonMoving = 0;
     }
     IEnumerator BackPLCPistons()
     {
-        if (location >= 0)
+        if (location > 0)
         {
 
             location = location - _direction * speed;
-            piston.position = piston.position - direction * speed;
+            piston.localPosition = piston.localPosition - direction * speed;
             yield return new WaitForSeconds(0.01f);
         }
         isPistonMoving = 0;

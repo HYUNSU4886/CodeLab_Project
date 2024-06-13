@@ -65,6 +65,11 @@ namespace MxComponentServer
                             Console.WriteLine(DisconnectPLC());
                             break;
                         }
+                    case "CS":
+                        {
+                            CloseTCPServer();
+                            break;
+                        }
                 }
             }
         }
@@ -109,7 +114,6 @@ namespace MxComponentServer
         static void GetYDataBlock()
         {
             mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
-            Thread.Sleep(10);
             ydata = ConvertDataIntoString(yData);
             isGetYDataBlock = 0;
         }
@@ -151,7 +155,18 @@ namespace MxComponentServer
 
             client = listener.AcceptTcpClient();
             stream = client.GetStream();
-            Console.WriteLine("Start TCP Server");
+            Console.WriteLine("Start TCP Server and Waiting Client");
+        }
+
+        void CloseTCPServer()
+        {
+            stream.Close();
+            listener.Stop();
+
+            listener.Start();
+            client = listener.AcceptTcpClient();
+            stream = client.GetStream();
+            Console.WriteLine("Start TCP Server and Waiting Client");
         }
 
     }
