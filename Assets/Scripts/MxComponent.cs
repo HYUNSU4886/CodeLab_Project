@@ -64,6 +64,11 @@ public class MxComponent : MonoBehaviour
         
     }
 
+    public void OnDestroy()
+    {
+        DisconnectPLC();
+        DisConnectTCPServer();
+    }
     // Update is called once per frame
     void Update()
     {

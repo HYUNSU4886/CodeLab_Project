@@ -94,7 +94,7 @@ public class Conveyor : MonoBehaviour
 
     IEnumerator PLCConveyorOn(Vector3 direction, float speed)
     {
-        if(isBoxIn)
+        if(isBoxIn && Box != null)
         {
             Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
             yield return new WaitForSeconds(0.01f);
@@ -103,7 +103,7 @@ public class Conveyor : MonoBehaviour
     }
     IEnumerator PLCConveyorRevOn(Vector3 direction, float speed)
     {
-        if (isBoxIn)
+        if (isBoxIn && Box != null)
         {
             Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction * -1;
             yield return new WaitForSeconds(0.01f);
@@ -139,6 +139,7 @@ public class Conveyor : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Box"))
         {
+            Box = null;
             isBoxIn = false;
         }
     }
