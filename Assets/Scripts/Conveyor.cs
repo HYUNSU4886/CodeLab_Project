@@ -11,7 +11,7 @@ public class Conveyor : MonoBehaviour
     public int isActive;
     public int _direction;
     public bool isBoxIn;
-    int isConveyorMoving;
+    public int isConveyorMoving;
     int isConveyorReversing;
 
     public char PLCInput1;
@@ -46,8 +46,11 @@ public class Conveyor : MonoBehaviour
             }
             if (isConveyorMoving == 0)
             {
-                isConveyorMoving = 1;
-                StartCoroutine(PLCConveyorOn(direction, speed));
+                if(Box != null)
+                {
+                    isConveyorMoving = 1;
+                    StartCoroutine(PLCConveyorOn(direction, speed));
+                }
             }
         }
         if(PLCInput1 == '0')
@@ -67,8 +70,11 @@ public class Conveyor : MonoBehaviour
             }
             if (isConveyorMoving == 0)
             {
-                isConveyorMoving = 1;
-                StartCoroutine(PLCConveyorRevOn(direction, speed));
+                if (Box != null)
+                {
+                    isConveyorMoving = 1;
+                    StartCoroutine(PLCConveyorRevOn(direction, speed));
+                }
             }
         }
         if (PLCInput3 == '0')
@@ -94,7 +100,7 @@ public class Conveyor : MonoBehaviour
 
     IEnumerator PLCConveyorOn(Vector3 direction, float speed)
     {
-        if(isBoxIn && Box != null)
+        if(isBoxIn)
         {
             Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction;
             yield return new WaitForSeconds(0.01f);
@@ -103,7 +109,7 @@ public class Conveyor : MonoBehaviour
     }
     IEnumerator PLCConveyorRevOn(Vector3 direction, float speed)
     {
-        if (isBoxIn && Box != null)
+        if (isBoxIn)
         {
             Box.GetComponent<Rigidbody>().velocity = direction * speed * _direction * -1;
             yield return new WaitForSeconds(0.01f);

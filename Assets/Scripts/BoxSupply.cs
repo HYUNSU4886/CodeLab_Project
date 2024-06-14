@@ -19,9 +19,10 @@ public class BoxSupply : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Conveyor.isBoxIn == false)
+        if(Conveyor.isBoxIn == false && Conveyor.PLCInput1 == '0')
         {
-            Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0,Random.Next(0, 180),0));
+            //Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0,Random.Next(0, 180),0));
+            Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0,0,0));
             Conveyor.isBoxIn = true;
         }
     }

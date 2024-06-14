@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -25,6 +26,7 @@ public class Transfer : MonoBehaviour
     public float location;
     public int ledCheck1;
     public int ledCheck2;
+    public float deltaTime;
 
     public GameObject LED1;
     public GameObject LED2;
@@ -119,7 +121,7 @@ public class Transfer : MonoBehaviour
     {
         if (location > 0)
         {
-            location = location - _direction * speed * Time.deltaTime;
+            location = location + _direction * speed * Time.deltaTime;
             TransferComponent.position = TransferComponent.position - direction * speed * Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
