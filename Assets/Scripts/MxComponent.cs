@@ -91,6 +91,7 @@ public class MxComponent : MonoBehaviour
             ReadD();
             if(preYDataBlock != yDataBlock || preDDataBlock != dDataBlock)
             {
+<<<<<<< Updated upstream
                 // Auto
                 if(isAuto == 1)
                 {
@@ -137,6 +138,16 @@ public class MxComponent : MonoBehaviour
 
 
                 print(yDataBlock);
+=======
+                pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
+                pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[21];
+                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[23];
+                Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
+                Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
+                print(yDataBlock);
+            }
+>>>>>>> Stashed changes
             
             }
 
@@ -162,8 +173,8 @@ public class MxComponent : MonoBehaviour
     }
     public void ReadY()
     {
-        byte[] buffer = new byte[200];
-        stream.Read(buffer, 0, 200);
+        byte[] buffer = new byte[320];
+        stream.Read(buffer, 0, 320);
         yDataBlock = Encoding.ASCII.GetString(buffer);
     }
     public void ReadD()

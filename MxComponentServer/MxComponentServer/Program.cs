@@ -35,9 +35,12 @@ namespace MxComponentServer
         {
             mxComponent = new ActUtlType64();
             mxComponent.ActLogicalStationNumber = 1;
-            StartTCPServer();
             new Thread(RepeatYThread).Start();
+<<<<<<< Updated upstream
 
+=======
+            StartTCPServer();
+>>>>>>> Stashed changes
             while (true)
             {
                 int bytes;
@@ -112,11 +115,16 @@ namespace MxComponentServer
                 {
                     isGetYDataBlock = 1;
                     GetYDataBlock();
+                    
                 }
             }
         }
         static void GetYDataBlock()
         {
+<<<<<<< Updated upstream
+=======
+            short[] yData = new short[32];
+>>>>>>> Stashed changes
             mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
             ydata = ConvertDataIntoString(yData);
             isGetYDataBlock = 0;
