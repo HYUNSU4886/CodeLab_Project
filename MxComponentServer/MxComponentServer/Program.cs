@@ -7,6 +7,8 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Linq;
+using System.Diagnostics;
+using System;
 
 namespace MxComponentServer
 {
@@ -177,35 +179,51 @@ namespace MxComponentServer
         State state = State.Disconnected;
         static ActUtlType64 mxComponent;
 
+        
+
         TcpListener listener;
         TcpClient client;
         NetworkStream stream;
+
+        static TcpListener listener1;
+        static TcpClient client1;
+        static NetworkStream stream1;
         static string ydata;
+        static string ddata;
         static int isGetYDataBlock = 0;
-        static short[] yData = new short[32];
-        static object lockObject = new object();
+        static short[] yData = new short[20];
+        static short[] dData = new short[10];
+
+        static Stopwatch sw = Stopwatch.StartNew();
+
 
         public MxComponentServer()
         {
             mxComponent = new ActUtlType64();
             mxComponent.ActLogicalStationNumber = 1;
+            Thread yThread = new Thread(RepeatYThread);
+            yThread.Start();
             StartTCPServer();
-            new Thread(RepeatYThread).Start();
 
+            int bytes;
+            byte[] buffer = new byte[200];
             while (true)
             {
-                int bytes;
-                byte[] buffer = new byte[320];
-                bytes = stream.Read(buffer, 0, buffer.Length);
-                if (bytes == 0) break; // 클라이언트 연결 종료 시
+                bytes = stream.Read(buffer, 0, 10);
 
-                string output = Encoding.ASCII.GetString(buffer, 0, bytes).Trim('\0');
+                string output = Encoding.ASCII.GetString(buffer, 0, 10).Trim('\0');
                 string[] splitOutput = output.Split(',');
                 switch (splitOutput[0])
                 {
-                    case "R":
+                    case "RY":
                         {
                             buffer = Encoding.ASCII.GetBytes(ydata);
+                            stream.Write(buffer, 0, buffer.Length);
+                            break;
+                        }
+                    case "RD":
+                        {
+                            buffer = Encoding.ASCII.GetBytes(ddata);
                             stream.Write(buffer, 0, buffer.Length);
                             break;
                         }
@@ -231,6 +249,7 @@ namespace MxComponentServer
                             break;
                         }
                 }
+
             }
         }
 
@@ -266,22 +285,25 @@ namespace MxComponentServer
         {
             while (true)
             {
-                lock (lockObject)
+                if (isGetYDataBlock == 0)
                 {
-                    if (isGetYDataBlock == 0)
-                    {
-                        isGetYDataBlock = 1;
-                        GetYDataBlock();
-                    }
+                    isGetYDataBlock = 1;
+                    GetYDataBlock();
                 }
-                Thread.Sleep(1); // CPU 사용량을 줄이기 위해 잠시 대기
             }
         }
 
+        
         static void GetYDataBlock()
         {
-            mxComponent.ReadDeviceBlock2("Y0", 32, out yData[0]);
-            ydata = ConvertDataIntoString(yData);
+            mxComponent.ReadDeviceBlock2("Y0", 20, out yData[0]);
+            ydata = ConvertYDataIntoString(yData);
+            isGetYDataBlock = 0;
+        }
+        static void GetDDataBlock()
+        {
+            mxComponent.ReadDeviceBlock2("D0", 10, out dData[0]);
+            ddata = ConvertDDataIntoString(dData);
             isGetYDataBlock = 0;
         }
 
@@ -290,7 +312,7 @@ namespace MxComponentServer
             int ret = mxComponent.SetDevice(device, value);
         }
 
-        static string ConvertDataIntoString(short[] data)
+        static string ConvertYDataIntoString(short[] data)
         {
             StringBuilder newYData = new StringBuilder();
             foreach (var item in data)
@@ -300,13 +322,23 @@ namespace MxComponentServer
             }
             return newYData.ToString();
         }
+        static string ConvertDDataIntoString(short[] data)
+        {
+            StringBuilder newDData = new StringBuilder();
+            foreach (var item in data)
+            {
+                string temp = Convert.ToString(item, 2).PadLeft(16, '0');
+                newDData.Append(new string(temp.Reverse().ToArray()));
+            }
+            return newDData.ToString();
+        }
 
         void StartTCPServer()
         {
             listener = new TcpListener(IPAddress.Any, 7000);
+            Console.WriteLine("Start TCP Server and Waiting Client");
             listener.Start();
 
-            Console.WriteLine("Start TCP Server and Waiting Client");
             client = listener.AcceptTcpClient();
             stream = client.GetStream();
         }
@@ -318,6 +350,10 @@ namespace MxComponentServer
             listener.Stop();
 
             Console.WriteLine("TCP Server Closed");
+            listener.Start();
+
+            client = listener.AcceptTcpClient();
+            stream = client.GetStream();
         }
     }
 

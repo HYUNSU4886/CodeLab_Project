@@ -19,15 +19,18 @@ public class Transfer : MonoBehaviour
     public float distance;
     public char PLCInput1;
     public char PLCInput2;
+    public int PLCInput3;
     public int isTransfering;
     public int endIndex;
     float time = 0;
     public int sensing;
     public float location;
+    public float tempLocation;
     public int ledCheck1;
     public int ledCheck2;
     public float deltaTime;
 
+    public int isStart;
     public GameObject LED1;
     public GameObject LED2;
 
@@ -35,6 +38,7 @@ public class Transfer : MonoBehaviour
     {
         PLCInput1 = '0';
         PLCInput2 = '0';
+        PLCInput3 = 0;
         sensing = 0;
         endIndex = 0;
         isTransfering = 0;
@@ -43,7 +47,12 @@ public class Transfer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PLCInput1 == '1')
+        if (PLCInput1 == '1' && isStart == 0)
+        {
+            isStart = 1;
+            tempLocation = location;
+        }
+        if(isStart == 1)
         {
             if (ledCheck1 == 0)
             {
@@ -64,7 +73,12 @@ public class Transfer : MonoBehaviour
                 LED1.GetComponent<Image>().color = Color.white;
             }
         }
-        if (PLCInput2 == '1')
+        if (PLCInput2 == '1' && isStart == 0)
+        {
+            isStart = 1;
+            tempLocation = location;
+        }
+        if (isStart == 1)
         {
             if (ledCheck2 == 0)
             {
@@ -111,9 +125,19 @@ public class Transfer : MonoBehaviour
     {
         if (location < distance)
         {
-            location = location + _direction * speed * Time.deltaTime;
-            TransferComponent.position = TransferComponent.position + direction * speed * Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
+            if(location < tempLocation + PLCInput3 || PLCInput3 == 0)
+            {
+                location = location + _direction * speed * Time.deltaTime;
+                TransferComponent.localPosition = TransferComponent.localPosition + direction * speed * Time.deltaTime;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            else
+            {
+                if (isStart == 1)
+                {
+                    isStart = 0;
+                }
+            }
         }
         isTransfering = 0;
     }
@@ -121,9 +145,19 @@ public class Transfer : MonoBehaviour
     {
         if (location > 0)
         {
-            location = location + _direction * speed * Time.deltaTime;
-            TransferComponent.position = TransferComponent.position - direction * speed * Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
+            if(location > tempLocation - PLCInput3 || PLCInput3 == 0)
+            {
+                location = location - _direction * speed * Time.deltaTime;
+                TransferComponent.localPosition = TransferComponent.localPosition - direction * speed * Time.deltaTime;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+            else
+            {
+                if (isStart == 1)
+                {
+                    isStart = 0;
+                }
+            }
         }
         isTransfering = 0;
     }

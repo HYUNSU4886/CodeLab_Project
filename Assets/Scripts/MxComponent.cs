@@ -5,6 +5,8 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using System.Diagnostics;
+using System;
 
 public class MxComponent : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class MxComponent : MonoBehaviour
     NetworkStream stream;
     bool isTCPConnecting;
     bool isPLCConnecting;
+    Stopwatch stopwatch = new Stopwatch();
 
     public GameObject pushCylinder;
     public GameObject ShieldCylinder;
@@ -33,6 +36,12 @@ public class MxComponent : MonoBehaviour
 
     public string preYDataBlock;
     public string yDataBlock;
+
+    public string preDDataBlock;
+    public string dDataBlock;
+    public int[] dDataArray = new int[10];
+
+
 
     public int isManual;
     public int isAuto;
@@ -75,9 +84,12 @@ public class MxComponent : MonoBehaviour
         if (isTCPConnecting && isPLCConnecting)
         {
             preYDataBlock = yDataBlock;
-            Write("R,");
-            Read();
-            if(preYDataBlock != yDataBlock)
+            preDDataBlock = dDataBlock;
+            Write("RY,");
+            ReadY();
+            Write("RD,");
+            ReadD();
+            if(preYDataBlock != yDataBlock || preDDataBlock != dDataBlock)
             {
                 // Auto
                 if(isAuto == 1)
@@ -90,10 +102,13 @@ public class MxComponent : MonoBehaviour
                     Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
                     XServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[170];
                     XServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[171];
+                    XServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[0];
                     YServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[172];
                     YServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[173];
+                    YServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[1];
                     ZServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[174];
                     ZServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[175];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[2];
                     ForkCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[176];
                     ForkCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[177];
                 }
@@ -122,8 +137,9 @@ public class MxComponent : MonoBehaviour
 
 
                 print(yDataBlock);
-            }
             
+            }
+
             Sensor(pushCylinderSensor1, "X10");
             Sensor(pushCylinderSensor2, "X11");
             Sensor(pushCylinderSensor3, "X12");
@@ -144,11 +160,23 @@ public class MxComponent : MonoBehaviour
                 Sensor.GetComponent<Sensor>().isChange = 0;
             }
     }
-    public void Read()
+    public void ReadY()
     {
-        byte[] buffer = new byte[320];
-        stream.Read(buffer, 0, 320);
+        byte[] buffer = new byte[200];
+        stream.Read(buffer, 0, 200);
         yDataBlock = Encoding.ASCII.GetString(buffer);
+    }
+    public void ReadD()
+    {
+        byte[] buffer = new byte[200];
+        stream.Read(buffer, 0, 200);
+        dDataBlock = Encoding.ASCII.GetString(buffer);
+
+        for(int i = 0; i * 16 < dDataBlock.Length; i++)
+        {
+            string segment = dDataBlock.Substring(i, Mathf.Min(16,dDataBlock.Length - i));
+            dDataArray[i] = Convert.ToInt32(segment, 2);
+        }
     }
 
     public void Write(string word)
