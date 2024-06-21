@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using System.Diagnostics;
 using System;
+using System.Linq;
 
 public class MxComponent : MonoBehaviour
 {
@@ -91,7 +92,6 @@ public class MxComponent : MonoBehaviour
             ReadD();
             if(preYDataBlock != yDataBlock || preDDataBlock != dDataBlock)
             {
-<<<<<<< Updated upstream
                 // Auto
                 if(isAuto == 1)
                 {
@@ -104,14 +104,19 @@ public class MxComponent : MonoBehaviour
                     XServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[170];
                     XServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[171];
                     XServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[0];
+                    XServoMotor.GetComponent<Transfer>().PLCInput4 = dDataArray[1];
                     YServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[172];
                     YServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[173];
-                    YServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[1];
+                    YServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[2];
+                    YServoMotor.GetComponent<Transfer>().PLCInput4 = dDataArray[3];
                     ZServoMotor.GetComponent<Transfer>().PLCInput1 = yDataBlock[174];
                     ZServoMotor.GetComponent<Transfer>().PLCInput2 = yDataBlock[175];
-                    ZServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[2];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput3 = dDataArray[4];
+                    ZServoMotor.GetComponent<Transfer>().PLCInput4 = dDataArray[5];
                     ForkCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[176];
                     ForkCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[177];
+                    Rotate.GetComponent<Rotate>().PLCInput1 = yDataBlock[178];
+                    Rotate.GetComponent<Rotate>().PLCInput2 = yDataBlock[179];
                 }
 
                 // Manual
@@ -135,19 +140,6 @@ public class MxComponent : MonoBehaviour
                     Rotate.GetComponent<Rotate>().PLCInput2 = yDataBlock[49];
 
                 }
-
-
-                print(yDataBlock);
-=======
-                pushCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[1];
-                pushCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[20];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput1 = yDataBlock[21];
-                ShieldCylinder.GetComponent<Cylinder>().PLCInput2 = yDataBlock[23];
-                Conveyor.GetComponent<Conveyor>().PLCInput1 = yDataBlock[160];
-                Conveyor.GetComponent<Conveyor>().PLCInput2 = yDataBlock[0];
-                print(yDataBlock);
-            }
->>>>>>> Stashed changes
             
             }
 
@@ -179,13 +171,13 @@ public class MxComponent : MonoBehaviour
     }
     public void ReadD()
     {
-        byte[] buffer = new byte[200];
-        stream.Read(buffer, 0, 200);
+        byte[] buffer = new byte[160];
+        stream.Read(buffer, 0, 160);
         dDataBlock = Encoding.ASCII.GetString(buffer);
 
         for(int i = 0; i * 16 < dDataBlock.Length; i++)
         {
-            string segment = dDataBlock.Substring(i, Mathf.Min(16,dDataBlock.Length - i));
+            string segment = new string(dDataBlock.Substring(i * 16, 16).Reverse().ToArray());
             dDataArray[i] = Convert.ToInt32(segment, 2);
         }
     }

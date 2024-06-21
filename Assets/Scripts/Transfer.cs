@@ -20,6 +20,7 @@ public class Transfer : MonoBehaviour
     public char PLCInput1;
     public char PLCInput2;
     public int PLCInput3;
+    public int PLCInput4;
     public int isTransfering;
     public int endIndex;
     float time = 0;
@@ -29,8 +30,10 @@ public class Transfer : MonoBehaviour
     public int ledCheck1;
     public int ledCheck2;
     public float deltaTime;
+    public float ratio = 10;
 
-    public int isStart;
+    public int isStartF;
+    public int isStartB;
     public GameObject LED1;
     public GameObject LED2;
 
@@ -39,20 +42,22 @@ public class Transfer : MonoBehaviour
         PLCInput1 = '0';
         PLCInput2 = '0';
         PLCInput3 = 0;
+        PLCInput4 = 0;
         sensing = 0;
         endIndex = 0;
         isTransfering = 0;
+        ratio = 20;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PLCInput1 == '1' && isStart == 0)
+        if (PLCInput1 == '1' && isStartF == 0)
         {
-            isStart = 1;
+            isStartF = 1;
             tempLocation = location;
         }
-        if(isStart == 1)
+        if(isStartF == 1)
         {
             if (ledCheck1 == 0)
             {
@@ -62,7 +67,7 @@ public class Transfer : MonoBehaviour
             if (isTransfering == 0)
             {
                 isTransfering = 1;
-                StartCoroutine(FrontPLCTransfer());
+                FrontPLCTransfer();
             }
         }
         if (PLCInput1 == '0')
@@ -73,12 +78,12 @@ public class Transfer : MonoBehaviour
                 LED1.GetComponent<Image>().color = Color.white;
             }
         }
-        if (PLCInput2 == '1' && isStart == 0)
+        if (PLCInput2 == '1' && isStartB == 0)
         {
-            isStart = 1;
+            isStartB = 1;
             tempLocation = location;
         }
-        if (isStart == 1)
+        if (isStartB == 1)
         {
             if (ledCheck2 == 0)
             {
@@ -88,7 +93,7 @@ public class Transfer : MonoBehaviour
             if (isTransfering == 0)
             {
                 isTransfering = 1;
-                StartCoroutine(BackPLCTransfer());
+                BackPLCTransfer();
             }
         }
         if (PLCInput2 == '0')
@@ -121,41 +126,43 @@ public class Transfer : MonoBehaviour
         sensing = 1;
     }
 
-    IEnumerator FrontPLCTransfer()
+    public void FrontPLCTransfer()
     {
         if (location < distance)
         {
-            if(location < tempLocation + PLCInput3 || PLCInput3 == 0)
+            if(location < tempLocation + PLCInput3/ratio || PLCInput3 == 0)
             {
                 location = location + _direction * speed * Time.deltaTime;
                 TransferComponent.localPosition = TransferComponent.localPosition + direction * speed * Time.deltaTime;
-                yield return new WaitForSeconds(Time.deltaTime);
             }
             else
             {
-                if (isStart == 1)
+                if (isStartF == 1 && PLCInput1 == '0')
                 {
-                    isStart = 0;
+                    TransferComponent.localPosition = TransferComponent.localPosition - direction * (location - tempLocation - PLCInput3/ratio);
+                    location = tempLocation + PLCInput3 / ratio;
+                    isStartF = 0;
                 }
             }
         }
         isTransfering = 0;
     }
-    IEnumerator BackPLCTransfer()
+    public void BackPLCTransfer()
     {
         if (location > 0)
         {
-            if(location > tempLocation - PLCInput3 || PLCInput3 == 0)
+            if(location > tempLocation - PLCInput4 / ratio || PLCInput4 == 0)
             {
                 location = location - _direction * speed * Time.deltaTime;
                 TransferComponent.localPosition = TransferComponent.localPosition - direction * speed * Time.deltaTime;
-                yield return new WaitForSeconds(Time.deltaTime);
             }
             else
             {
-                if (isStart == 1)
+                if (isStartB == 1 && PLCInput2 == '0')
                 {
-                    isStart = 0;
+                    TransferComponent.localPosition = TransferComponent.localPosition + direction * (tempLocation - PLCInput4 / ratio - location);
+                    location = tempLocation - PLCInput4 / ratio;
+                    isStartB = 0;
                 }
             }
         }

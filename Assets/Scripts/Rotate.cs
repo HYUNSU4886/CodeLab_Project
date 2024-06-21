@@ -87,14 +87,14 @@ public class Rotate : MonoBehaviour
 
     public void OnActiveRotateBtnClkEvent()
     {
-        Origin = RotateComponent.position;
+        Origin = RotateComponent.localPosition;
         time = 0;
         print("Activate Cylinder");
         StartCoroutine(_Transfer(direction, speed, distance));
     }
     public void OnReverseRotateBtnClkEvent()
     {
-        Origin = RotateComponent.position;
+        Origin = RotateComponent.localPosition;
         time = 0;
         print("Reverse Activate Cylinder");
         StartCoroutine(_Transfer(-direction, speed, distance));
@@ -110,7 +110,7 @@ public class Rotate : MonoBehaviour
         if (angle < distance)
         {
             angle = angle + _direction * speed;
-            RotateComponent.rotation = RotateComponent.rotation * Quaternion.Euler(direction * speed);
+            RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * speed);
             yield return new WaitForSeconds(0.01f);
         }
         isRotating = 0;
@@ -121,7 +121,7 @@ public class Rotate : MonoBehaviour
         {
 
             angle = angle - _direction * speed;
-            RotateComponent.rotation = RotateComponent.rotation * Quaternion.Euler(direction * speed * -1);
+            RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * speed * -1);
             yield return new WaitForSeconds(0.01f);
         }
         isRotating = 0;

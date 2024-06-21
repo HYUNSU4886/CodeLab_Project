@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< Updated upstream
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a99e5adc14fbb7ad8e3a1f2c53c052b8e0dc7b1")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d0db6b5021e41283c6393a5a3d07ec784fbc363")]
->>>>>>> Stashed changes
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7944b361ad5b822e4436a4d7f0bb0dce0bae1c00")]
 [assembly: System.Reflection.AssemblyProductAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MxComponentServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
