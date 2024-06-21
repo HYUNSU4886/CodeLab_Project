@@ -18,6 +18,7 @@ public class Cylinder : MonoBehaviour
     public float distance;
     public char PLCInput1;
     public char PLCInput2;
+    public int PLCInput3;
     public int isPistonMoving;
     public int endIndex;
     float time = 0;
@@ -33,6 +34,7 @@ public class Cylinder : MonoBehaviour
     {
         PLCInput1 = '0';
         PLCInput2 = '0';
+        PLCInput3 = 0;
         sensing = 0;
         endIndex = 0;
         isPistonMoving = 0;
@@ -109,9 +111,9 @@ public class Cylinder : MonoBehaviour
     {
         if(location < distance) 
         { 
-            location = location + _direction * speed;
-            piston.localPosition = piston.localPosition + direction * speed;
-            yield return new WaitForSeconds(0.01f);
+            location = location + _direction * speed * Time.deltaTime;
+            piston.localPosition = piston.localPosition + direction * speed * Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
         isPistonMoving = 0;
     }
@@ -120,9 +122,9 @@ public class Cylinder : MonoBehaviour
         if (location > 0)
         {
 
-            location = location - _direction * speed;
-            piston.localPosition = piston.localPosition - direction * speed;
-            yield return new WaitForSeconds(0.01f);
+            location = location - _direction * speed * Time.deltaTime;
+            piston.localPosition = piston.localPosition - direction * speed * Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
         isPistonMoving = 0;
     }
