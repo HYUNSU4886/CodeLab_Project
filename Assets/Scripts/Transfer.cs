@@ -145,6 +145,12 @@ public class Transfer : MonoBehaviour
                 }
             }
         }
+        else if (isStartF == 1 && PLCInput1 == '0')
+        {
+            TransferComponent.localPosition = TransferComponent.localPosition + direction * (location - distance);
+            location = distance;
+            isStartB = 0;
+        }
         isTransfering = 0;
     }
     public void BackPLCTransfer()
@@ -165,6 +171,12 @@ public class Transfer : MonoBehaviour
                     isStartB = 0;
                 }
             }
+        }
+        else if(isStartB == 1 && PLCInput2 == '0')
+        {
+            TransferComponent.localPosition = TransferComponent.localPosition + direction * (0 - location);
+            location = 0;
+            isStartB = 0;
         }
         isTransfering = 0;
     }
