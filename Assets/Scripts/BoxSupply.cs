@@ -21,8 +21,11 @@ public class BoxSupply : MonoBehaviour
     {
         if(Conveyor.isBoxIn == false && Conveyor.PLCInput1 == '0')
         {
-            Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0,Random.Next(0, 180),0));
-            //Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0,90,0));
+            if (Random.Next(1, 100) < 51)
+                Instantiate(Box1, SupplyPoint.position, Quaternion.Euler(0, Random.Next(0, 180), 0));
+            else
+                Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0, Random.Next(0, 180), 0));
+            //Instantiate(Box1, SupplyPoint.position, Quaternion.Euler(0,90,0));
             Conveyor.isBoxIn = true;
         }
     }

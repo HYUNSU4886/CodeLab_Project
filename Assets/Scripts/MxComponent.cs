@@ -161,7 +161,7 @@ public class MxComponent : MonoBehaviour
         {
             Write($"W,{component},{Sensor.GetComponent<Sensor>().PLCOutput},");
                 Sensor.GetComponent<Sensor>().isChange = 0;
-            }
+        }
     }
     public void ReadY()
     {

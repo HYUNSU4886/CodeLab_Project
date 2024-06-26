@@ -113,6 +113,10 @@ public class Rotate : MonoBehaviour
             RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * speed);
             yield return new WaitForSeconds(0.01f);
         }
+        if (angle > distance)
+        {
+            RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * (distance - angle));
+        }
         isRotating = 0;
     }
     IEnumerator BackPLCRotate()
@@ -123,6 +127,10 @@ public class Rotate : MonoBehaviour
             angle = angle - _direction * speed;
             RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * speed * -1);
             yield return new WaitForSeconds(0.01f);
+        }
+        if(angle < 0)
+        {
+            RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * (0 - angle));
         }
         isRotating = 0;
     }
