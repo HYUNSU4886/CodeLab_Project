@@ -15,7 +15,6 @@ public class MxComponent : MonoBehaviour
     NetworkStream stream;
     bool isTCPConnecting;
     bool isPLCConnecting;
-    Stopwatch stopwatch = new Stopwatch();
 
     public GameObject pushCylinder;
     public GameObject ShieldCylinder;
@@ -79,7 +78,6 @@ public class MxComponent : MonoBehaviour
         DisconnectPLC();
         DisConnectTCPServer();
     }
-    // Update is called once per frame
     void Update()
     {
         if (isTCPConnecting && isPLCConnecting)
@@ -224,6 +222,17 @@ public class MxComponent : MonoBehaviour
         Write($"W,X99,1,");
         isAuto = 1;
         isManual = 0;
+
+        XServoMotor.GetComponent<Transfer>().location = 0.1f;
+        XServoMotor.GetComponent<Transform>().localPosition = new Vector3(-1.6f, 0, -0.2f);
+        YServoMotor.GetComponent<Transfer>().location = 3.36f;
+        YServoMotor.GetComponent<Transform>().localPosition = new Vector3(1.8f, 0.45f, 2.9f);
+        ZServoMotor.GetComponent<Transfer>().location = 0.32f;
+        ZServoMotor.GetComponent<Transform>().localPosition = new Vector3(-1.43f, -0.4f, -1.95f);
+        ForkCylinder.GetComponent<Cylinder>().location = 0.23f;
+        ForkCylinder.GetComponent<Cylinder>().piston.GetComponent<Transform>().localPosition = new Vector3(-0.03f, 0, 0);
+        Rotate.GetComponent<Rotate>().angle = 0;
+        Rotate.GetComponent<Rotate>().RotateComponent.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0,0,0));
     }
     public void OnManualProcessBtnClkEvent()
     {

@@ -25,7 +25,6 @@ public class BoxSupply : MonoBehaviour
                 Instantiate(Box1, SupplyPoint.position, Quaternion.Euler(0, Random.Next(0, 180), 0));
             else
                 Instantiate(Box2, SupplyPoint.position, Quaternion.Euler(0, Random.Next(0, 180), 0));
-            //Instantiate(Box1, SupplyPoint.position, Quaternion.Euler(0,90,0));
             Conveyor.isBoxIn = true;
         }
     }

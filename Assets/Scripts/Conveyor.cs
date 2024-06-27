@@ -12,7 +12,6 @@ public class Conveyor : MonoBehaviour
     public int _direction;
     public bool isBoxIn;
     public int isConveyorMoving;
-    int isConveyorReversing;
 
     public char PLCInput1;
     public char PLCInput2;
@@ -31,7 +30,6 @@ public class Conveyor : MonoBehaviour
         isBoxIn = false;
         _direction = 1;
         isConveyorMoving = 0;
-        isConveyorReversing = 0;
     }
 
     // Update is called once per frame
@@ -86,18 +84,6 @@ public class Conveyor : MonoBehaviour
             }
         }
     }
-
-
-    public void OnConveyorBtnClkEvent()
-    {
-        isActive = 1;
-        StartCoroutine(Moving(direction,speed));
-    }
-    public void OffConveyorBtnClkEvent()
-    {
-        isActive = 0;
-    }
-
     IEnumerator PLCConveyorOn(Vector3 direction, float speed)
     {
         if(isBoxIn)
@@ -115,10 +101,6 @@ public class Conveyor : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
             isConveyorMoving = 0;
         }
-    }
-    public void ReverseConveyorDirectionBtnClkEvent()
-    {
-        _direction = _direction * -1;
     }
 
 

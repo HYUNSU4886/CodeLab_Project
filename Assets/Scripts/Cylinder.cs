@@ -9,7 +9,6 @@ public class Cylinder : MonoBehaviour
 {
 
     public Transform piston;
-    Vector3 Origin;
     public Button active;
     public Button reverse;
     public Vector3 direction;
@@ -20,9 +19,6 @@ public class Cylinder : MonoBehaviour
     public char PLCInput2;
     public int PLCInput3;
     public int isPistonMoving;
-    public int endIndex;
-    float time = 0;
-    public int sensing;
     public float location;
     public int ledCheck1;
     public int ledCheck2;
@@ -35,8 +31,6 @@ public class Cylinder : MonoBehaviour
         PLCInput1 = '0';
         PLCInput2 = '0';
         PLCInput3 = 0;
-        sensing = 0;
-        endIndex = 0;
         isPistonMoving = 0;
     }
 
@@ -87,26 +81,6 @@ public class Cylinder : MonoBehaviour
         }
     }
 
-    public void OnActivePistonBtnClkEvent()
-    {
-        Origin = piston.position;
-        time = 0;
-        print("Activate Cylinder");
-        StartCoroutine(Pistons(direction, speed, distance));
-    }
-    public void OnReversePistonBtnClkEvent()
-    {
-        Origin = piston.position;
-        time = 0;
-        print("Reverse Activate Cylinder");
-        StartCoroutine(Pistons(-direction, speed, distance));
-    }
-
-    public void Onsensor()
-    {
-        sensing = 1;
-    }
-
     IEnumerator FrontPLCPistons()
     {
         if(location < distance) 
@@ -127,35 +101,5 @@ public class Cylinder : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
         isPistonMoving = 0;
-    }
-    IEnumerator Pistons(Vector3 direction,float speed,float distance)
-    {
-        active.interactable = false;
-        reverse.interactable = false;
-        while (true)
-        {
-            time += 0.01f;
-            if (time > distance / speed)
-                break;
-            if (sensing == 1)
-                break;
-            piston.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-            yield return new WaitForSeconds(0.01f);
-        }
-        if(sensing == 1)
-        {
-            sensing = 0;
-            while(true)
-            {
-                time -= 0.01f;
-                if (time <= 0)
-                    break;
-                piston.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-                yield return new WaitForSeconds(0.01f);
-            }
-        }
-        reverse.interactable = true;
-        active.interactable = true;
-        endIndex = 1;
     }
 }

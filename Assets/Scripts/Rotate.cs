@@ -9,7 +9,6 @@ public class Rotate : MonoBehaviour
 {
 
     public Transform RotateComponent;
-    Vector3 Origin;
     public Button active;
     public Button reverse;
     public Vector3 direction;
@@ -19,9 +18,6 @@ public class Rotate : MonoBehaviour
     public char PLCInput1;
     public char PLCInput2;
     public int isRotating;
-    public int endIndex;
-    float time = 0;
-    public int sensing;
     public float angle;
     public int ledCheck1;
     public int ledCheck2;
@@ -33,12 +29,9 @@ public class Rotate : MonoBehaviour
     {
         PLCInput1 = '0';
         PLCInput2 = '0';
-        sensing = 0;
-        endIndex = 0;
         isRotating = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PLCInput1 == '1')
@@ -85,25 +78,6 @@ public class Rotate : MonoBehaviour
         }
     }
 
-    public void OnActiveRotateBtnClkEvent()
-    {
-        Origin = RotateComponent.localPosition;
-        time = 0;
-        print("Activate Cylinder");
-        StartCoroutine(_Transfer(direction, speed, distance));
-    }
-    public void OnReverseRotateBtnClkEvent()
-    {
-        Origin = RotateComponent.localPosition;
-        time = 0;
-        print("Reverse Activate Cylinder");
-        StartCoroutine(_Transfer(-direction, speed, distance));
-    }
-
-    public void Onsensor()
-    {
-        sensing = 1;
-    }
 
     IEnumerator FrontPLCRotate()
     {
@@ -133,35 +107,5 @@ public class Rotate : MonoBehaviour
             RotateComponent.localRotation = RotateComponent.localRotation * Quaternion.Euler(direction * (0 - angle));
         }
         isRotating = 0;
-    }
-    IEnumerator _Transfer(Vector3 direction, float speed, float distance)
-    {
-        active.interactable = false;
-        reverse.interactable = false;
-        while (true)
-        {
-            time += 0.01f;
-            if (time > distance / speed)
-                break;
-            if (sensing == 1)
-                break;
-            RotateComponent.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-            yield return new WaitForSeconds(0.01f);
-        }
-        if (sensing == 1)
-        {
-            sensing = 0;
-            while (true)
-            {
-                time -= 0.01f;
-                if (time <= 0)
-                    break;
-                RotateComponent.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-                yield return new WaitForSeconds(0.01f);
-            }
-        }
-        reverse.interactable = true;
-        active.interactable = true;
-        endIndex = 1;
     }
 }

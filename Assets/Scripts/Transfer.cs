@@ -12,7 +12,6 @@ public class Transfer : MonoBehaviour
 {
 
     public Transform TransferComponent;
-    Vector3 Origin;
     public UnityEngine.UI.Button active;
     public UnityEngine.UI.Button reverse;
     public Vector3 direction;
@@ -26,9 +25,6 @@ public class Transfer : MonoBehaviour
     public int PLCInput3;
     public int PLCInput4;
     public int isTransfering;
-    public int endIndex;
-    float time = 0;
-    public int sensing;
     public float location;
     public float tempLocation;
     public int ledCheck1;
@@ -49,13 +45,10 @@ public class Transfer : MonoBehaviour
         PLCInput6 = '0';
         PLCInput3 = 0;
         PLCInput4 = 0;
-        sensing = 0;
-        endIndex = 0;
         isTransfering = 0;
         ratio = 20;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (PLCInput1 == '1' && isStartF == 0)
@@ -154,10 +147,6 @@ public class Transfer : MonoBehaviour
         }
     }
 
-    public void Onsensor()
-    {
-        sensing = 1;
-    }
 
     public void FrontPLCTransfer()
     {
@@ -233,35 +222,5 @@ public class Transfer : MonoBehaviour
         }
         isTransfering = 0;
     }
-    /*IEnumerator _Transfer(Vector3 direction, float speed, float distance)
-    {
-        active.interactable = false;
-        reverse.interactable = false;
-        while (true)
-        {
-            time += 0.01f;
-            if (time > distance / speed)
-                break;
-            if (sensing == 1)
-                break;
-            TransferComponent.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-            yield return new WaitForSeconds(0.01f);
-        }
-        if (sensing == 1)
-        {
-            sensing = 0;
-            while (true)
-            {
-                time -= 0.01f;
-                if (time <= 0)
-                    break;
-                TransferComponent.position = Vector3.Lerp(Origin, Origin + distance * direction, time * speed / distance);
-                yield return new WaitForSeconds(0.01f);
-            }
-        }
-        reverse.interactable = true;
-        active.interactable = true;
-        endIndex = 1;
-    }*/
 
 }
