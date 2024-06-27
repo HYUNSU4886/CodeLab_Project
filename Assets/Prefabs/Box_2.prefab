@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8311477813834464489}
   m_Layer: 3
   m_Name: Box_2
-  m_TagString: Untagged
+  m_TagString: Box2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4279979935521194213, guid: 117548fc87335cf4eaded48d5e85bfa0, type: 3}
+  - {fileID: 2100000, guid: ac53071e13f946b49bc91df05c045154, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

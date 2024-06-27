@@ -24,6 +24,7 @@ public class MxComponent : MonoBehaviour
     public GameObject ZServoMotor;
     public GameObject Rotate;
     public GameObject ForkCylinder;
+    public GameObject Fork;
 
     public GameObject pushCylinderSensor1;
     public GameObject pushCylinderSensor2;
@@ -220,11 +221,13 @@ public class MxComponent : MonoBehaviour
     public void OnAutoProcessBtnClkEvent()
     {
         Write($"W,X99,1,");
+        Write($"W,X4,0,");
+        Write($"W,X0,0,");
         isAuto = 1;
         isManual = 0;
 
-        XServoMotor.GetComponent<Transfer>().location = 0.1f;
-        XServoMotor.GetComponent<Transform>().localPosition = new Vector3(-1.6f, 0, -0.2f);
+        XServoMotor.GetComponent<Transfer>().location = 0.12f;
+        XServoMotor.GetComponent<Transform>().localPosition = new Vector3(-1.58f, 0, -0.2f);
         YServoMotor.GetComponent<Transfer>().location = 3.36f;
         YServoMotor.GetComponent<Transform>().localPosition = new Vector3(1.8f, 0.45f, 2.9f);
         ZServoMotor.GetComponent<Transfer>().location = 0.32f;
@@ -233,10 +236,14 @@ public class MxComponent : MonoBehaviour
         ForkCylinder.GetComponent<Cylinder>().piston.GetComponent<Transform>().localPosition = new Vector3(-0.03f, 0, 0);
         Rotate.GetComponent<Rotate>().angle = 0;
         Rotate.GetComponent<Rotate>().RotateComponent.GetComponent<Transform>().localRotation = Quaternion.Euler(new Vector3(0,0,0));
+        if(Fork.GetComponent<Fork>().Box != null)
+            Destroy(Fork.GetComponent<Fork>().Box);
+
     }
     public void OnManualProcessBtnClkEvent()
     {
         Write($"W,X4,1,");
+        Write($"W,X99,0,");
         isAuto = 0;
         isManual = 1;
     }

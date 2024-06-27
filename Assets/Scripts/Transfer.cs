@@ -12,8 +12,6 @@ public class Transfer : MonoBehaviour
 {
 
     public Transform TransferComponent;
-    public UnityEngine.UI.Button active;
-    public UnityEngine.UI.Button reverse;
     public Vector3 direction;
     public int _direction;
     public float speed;
@@ -36,6 +34,7 @@ public class Transfer : MonoBehaviour
     public int isStartB;
     public GameObject LED1;
     public GameObject LED2;
+    public TMP_Text Text;
 
     void Start()
     {
@@ -66,6 +65,8 @@ public class Transfer : MonoBehaviour
             if (isTransfering == 0)
             {
                 isTransfering = 1;
+                if((tempLocation + PLCInput3 / ratio - location) >= 0)
+                    Text.text = $"{Convert.ToInt32((tempLocation + PLCInput3 / ratio - location) * 20)}";
                 FrontPLCTransfer();
             }
         }
@@ -92,6 +93,8 @@ public class Transfer : MonoBehaviour
             if (isTransfering == 0)
             {
                 isTransfering = 1;
+                if((location - tempLocation + PLCInput4 / ratio) >= 0)
+                    Text.text = $"{Convert.ToInt32((location - tempLocation + PLCInput4 / ratio) * 20)}";
                 BackPLCTransfer();
             }
         }
