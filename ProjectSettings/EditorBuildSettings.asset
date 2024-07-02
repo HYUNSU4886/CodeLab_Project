@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/CATIA.unity
+    guid: 6da9aa9234ab8a14bb71d0e968dab02e
   m_configObjects: {}
